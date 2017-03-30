@@ -16,6 +16,7 @@ $.fn.stick_in_parent = (opts={}) ->
     offset_top
     spacer: manual_spacer
     bottoming: enable_bottoming
+    container: container
   } = opts
 
   win_height = win.height()
@@ -27,6 +28,7 @@ $.fn.stick_in_parent = (opts={}) ->
   sticky_class ?= "is_stuck"
 
   enable_bottoming = true unless enable_bottoming?
+  win = container if manual_spacer?
 
   # we need this because jquery's version (along with css()) rounds everything
   outer_width = (el) ->
@@ -72,7 +74,7 @@ $.fn.stick_in_parent = (opts={}) ->
         padding_top = parseInt parent.css("padding-top"), 10
         padding_bottom = parseInt parent.css("padding-bottom"), 10
 
-        parent_top = parent.offset().top + border_top + padding_top
+        parent_top = parent.offset().top + border_top + padding_top + win.scrollTop()
         parent_height = parent.height()
 
         if fixed
@@ -92,7 +94,7 @@ $.fn.stick_in_parent = (opts={}) ->
 
           restore = true
 
-        top = elm.offset().top - (parseInt(elm.css("margin-top"), 10) or 0) - offset_top
+        top = elm.offset().top - (parseInt(elm.css("margin-top"), 10) or 0) - offset_top + win.scrollTop()
 
         height = elm.outerHeight true
 
